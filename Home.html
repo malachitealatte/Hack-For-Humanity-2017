@@ -10,34 +10,35 @@
   
   <style>
 .button1 {
+  border:  none;
   padding: 15px 25px;
-  font-size: 24px;
   text-align: center;
+  outline-style: none;
+  outline-width: medium;
   cursor: pointer;
-  outline: none;
-  color: #fff;
-  background-color: #4CAF50;
-  border: none;
-  border-radius: 15px;
-  box-shadow: 0 9px #999;
+  outline-color: invert;
+  background-color: #4caf50;
+  font-size: 24px;
+  color: #ffffff;
 }
-
-.button:hover {background-color: #3e8e41}
-
-.button:active {
+.button:hover {
   background-color: #3e8e41;
-  box-shadow: 0 5px #666;
-  transform: translateY(4px);
 }
+.button:active {
+  background-color: #25d42b;
+}
+
   </style>
 </head><body style="margin-left: 90px; width: 256px;">
-<div style="">
-<h3>I want to...<br>
-</h3>
+<div style="font-family: Times New Roman,Times,serif;">
+<h1>I want to...</h1>
 </div>
 
-<button class="button1">Volunteer</button>
-<button class="button1">Create/Register an Event</button><br>
+<div><button class="button1">Volunteer</button></div>
+
+<div><button class="button1">Create/Register an Event</button></div>
+
+<br>
 
 <br>
 
