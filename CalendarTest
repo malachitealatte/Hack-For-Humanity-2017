@@ -1,186 +1,132 @@
+<html>
+<head>
+<title>JavaScript calendar</title>
+<script>
+function displayCalendar(){
 
-<HEAD>
 
-<style type="text/css">
-<!--
-span.label {color:black;width:30;height:16;text-align:center;margin-top:0;background:#ffF;font:bold 13px Arial}
-span.c1 {cursor:hand;color:black;width:30;height:16;text-align:center;margin-top:0;background:#ffF;font:bold 13px Arial}
-span.c2 {cursor:hand;color:red;width:30;height:16;text-align:center;margin-top:0;background:#ffF;font:bold 13px Arial}
-span.c3 {cursor:hand;color:#b0b0b0;width:30;height:16;text-align:center;margin-top:0;background:#ffF;font:bold 12px Arial}
--->
-</style>
+ var htmlContent ="";
+ var FebNumberOfDays ="";
+ var counter = 1;
 
-<script type="text/javascript">
-<!-- This script and many more are available free online at -->
-<!-- The JavaScript Source!! http://www.javascriptsource.com -->
 
-<!-- Begin
-function maxDays(mm, yyyy){
-var mDay;
-	if((mm == 3) || (mm == 5) || (mm == 8) || (mm == 10)){
-		mDay = 30;
-  	}
-  	else{
-  		mDay = 31
-  		if(mm == 1){
-   			if (yyyy/4 - parseInt(yyyy/4) != 0){
-   				mDay = 28
-   			}
-		   	else{
-   				mDay = 29
-  			}
-		}
-  }
-return mDay;
+ var dateNow = new Date();
+ var month = dateNow.getMonth();
+
+ var nextMonth = month+1; //+1; //Used to match up the current month with the correct start date.
+ var prevMonth = month -1;
+ var day = dateNow.getDate();
+ var year = dateNow.getFullYear();
+
+
+ //Determing if February (28,or 29)
+ if (month == 1){
+    if ( (year%100!=0) && (year%4==0) || (year%400==0)){
+      FebNumberOfDays = 29;
+    }else{
+      FebNumberOfDays = 28;
+    }
+ }
+
+
+ // names of months and week days.
+ var monthNames = ["January","February","March","April","May","June","July","August","September","October","November", "December"];
+ var dayNames = ["Sunday","Monday","Tuesday","Wednesday","Thrusday","Friday", "Saturday"];
+ var dayPerMonth = ["31", ""+FebNumberOfDays+"","31","30","31","30","31","31","30","31","30","31"]
+
+
+ // days in previous month and next one , and day of week.
+ var nextDate = new Date(nextMonth +' 1 ,'+year);
+ var weekdays= nextDate.getDay();
+ var weekdays2 = weekdays
+ var numOfDays = dayPerMonth[month];
+
+
+
+
+ // this leave a white space for days of pervious month.
+ while (weekdays>0){
+    htmlContent += "<td class='monthPre'></td>";
+
+ // used in next loop.
+     weekdays--;
+ }
+
+ // loop to build the calander body.
+ while (counter <= numOfDays){
+
+     // When to start new line.
+    if (weekdays2 > 6){
+        weekdays2 = 0;
+        htmlContent += "</tr><tr>";
+    }
+
+
+
+    // if counter is current day.
+    // highlight current day using the CSS defined in header.
+    if (counter == day){
+        htmlContent +="<td class='dayNow'  onMouseOver='this.style.background=\"#FF0000\"; this.style.color=\"#FFFFFF\"' "+
+        "onMouseOut='this.style.background=\"#FFFFFF\"; this.style.color=\"#00FF00\"'>"+counter+"</td>";
+    }else{
+        htmlContent +="<td class='monthNow' onMouseOver='this.style.background=\"#FF0000\"'"+
+        " onMouseOut='this.style.background=\"#FFFFFF\"'>"+counter+"</td>";
+
+    }
+
+    weekdays2++;
+    counter++;
+ }
+
+
+
+ // building the calendar html body.
+ var calendarBody = "<table class='calendar'> <tr class='monthNow'><th colspan='7'>"
+ +monthNames[month]+" "+ year +"</th></tr>";
+ calendarBody +="<tr class='dayNames'>  <td>Sun</td>  <td>Mon</td> <td>Tues</td>"+
+ "<td>Wed</td> <td>Thurs</td> <td>Fri</td> <td>Sat</td> </tr>";
+ calendarBody += "<tr>";
+ calendarBody += htmlContent;
+ calendarBody += "</tr></table>";
+ // set the content of div .
+ document.getElementById("calendar").innerHTML=calendarBody;
+
 }
-function changeBg(id){
-	if (eval(id).style.backgroundColor != "yellow"){
-		eval(id).style.backgroundColor = "yellow"
-	}
-	else{
-		eval(id).style.backgroundColor = "#ffffff"
-	}
-}
-function writeCalendar(){
-var now = new Date
-var dd = now.getDate()
-var mm = now.getMonth()
-var dow = now.getDay()
-var yyyy = now.getFullYear()
-var arrM = new Array("January","February","March","April","May","June","July","August","September","October","November","December")
-var arrY = new Array()
-	for (ii=0;ii<=4;ii++){
-		arrY[ii] = yyyy - 2 + ii
-	}
-var arrD = new Array("Sun","Mon","Tue","Wed","Thu","Fri","Sat")
-
-var text = ""
-text = "<form name=calForm>"
-text += "<table border=1>"
-text += "<tr><td>"
-text += "<table width=100%><tr>"
-text += "<td align=left>"
-text += "<select name=selMonth onChange='changeCal()'>"
-	for (ii=0;ii<=11;ii++){
-		if (ii==mm){
-			text += "<option value= " + ii + " Selected>" + arrM[ii] + "</option>"
-		}
-		else{
-			text += "<option value= " + ii + ">" + arrM[ii] + "</option>"
-		}
-	}
-text += "</select>"
-text += "</td>"
-text += "<td align=right>"
-text += "<select name=selYear onChange='changeCal()'>"
-	for (ii=0;ii<=4;ii++){
-		if (ii==2){
-			text += "<option value= " + arrY[ii] + " Selected>" + arrY[ii] + "</option>"
-		}
-		else{
-			text += "<option value= " + arrY[ii] + ">" + arrY[ii] + "</option>"
-		}
-	}
-text += "</select>"
-text += "</td>"
-text += "</tr></table>"
-text += "</td></tr>"
-text += "<tr><td>"
-text += "<table border=1>"
-text += "<tr>"
-	for (ii=0;ii<=6;ii++){
-		text += "<td align=center><span class=label>" + arrD[ii] + "</span></td>"
-	}
-text += "</tr>"
-aa = 0
-	for (kk=0;kk<=5;kk++){
-		text += "<tr>"
-		for (ii=0;ii<=6;ii++){
-			text += "<td align=center><span id=sp" + aa + " onClick='changeBg(this.id)'>1</span></td>"
-			aa += 1
-		}
-		text += "</tr>"
-	}
-text += "</table>"
-text += "</td></tr>"
-text += "</table>"
-text += "</form>"
-document.write(text)
-changeCal()
-}
-function changeCal(){
-var now = new Date
-var dd = now.getDate()
-var mm = now.getMonth()
-var dow = now.getDay()
-var yyyy = now.getFullYear()
-var currM = parseInt(document.calForm.selMonth.value)
-var prevM
-	if (currM!=0){
-		prevM = currM - 1
-	}
-	else{
-		prevM = 11
-	}
-var currY = parseInt(document.calForm.selYear.value)
-var mmyyyy = new Date()
-mmyyyy.setFullYear(currY)
-mmyyyy.setMonth(currM)
-mmyyyy.setDate(1)
-var day1 = mmyyyy.getDay()
-	if (day1 == 0){
-		day1 = 7
-	}
-var arrN = new Array(41)
-var aa
-	for (ii=0;ii<day1;ii++){
-		arrN[ii] = maxDays((prevM),currY) - day1 + ii + 1
-	}
-	aa = 1
-	for (ii=day1;ii<=day1+maxDays(currM,currY)-1;ii++){
-		arrN[ii] = aa
-		aa += 1
-	}
-	aa = 1
-	for (ii=day1+maxDays(currM,currY);ii<=41;ii++){
-		arrN[ii] = aa
-		aa += 1
-	}
-	for (ii=0;ii<=41;ii++){
-		eval("sp"+ii).style.backgroundColor = "#FFFFFF"
-	}
-var dCount = 0
-	for (ii=0;ii<=41;ii++){
-		if (((ii<7)&&(arrN[ii]>20))||((ii>27)&&(arrN[ii]<20))){
-			eval("sp"+ii).innerHTML = arrN[ii]
-			eval("sp"+ii).className = "c3"
-		}
-		else{
-			eval("sp"+ii).innerHTML = arrN[ii]
-			if ((dCount==0)||(dCount==6)){
-				eval("sp"+ii).className = "c2"
-			}
-			else{
-				eval("sp"+ii).className = "c1"
-			}
-			if ((arrN[ii]==dd)&&(mm==currM)&&(yyyy==currY)){
-				eval("sp"+ii).style.backgroundColor="#90EE90"
-			}
-		}
-	dCount += 1
-		if (dCount>6){
-			dCount=0
-		}
-	}
-}
-//  End -->
 </script>
+</head>
 
-<BODY>
+<body onload="displayCalendar()">
 
-<script type="text/javascript">writeCalendar()</script>
+<div id="calendar"></div>
+</body>
+<style>
+.monthPre{
+ color: gray;
+ text-align: center;
+}
+.monthNow{
+ color: blue;
+ text-align: center;
+}
+.dayNow{
+ border: 2px solid black;
+ color: #FF0000;
+ text-align: center;
+}
+.calendar td{
+ htmlContent: 2px;
+ width: 40px;
+}
+.monthNow th{
+ background-color: #000000;
+ color: #FFFFFF;
+ text-align: center;
+}
+.dayNames{
+ background: #0FF000;
+ color: #FFFFFF;
+ text-align: center;
+}
 
-<p><center>
-<font face="arial, helvetica" size"-2">Free JavaScripts provided<br>
-by <a href="http://javascriptsource.com">The JavaScript Source</a></font>
-</center><p>
+</style>
+</html> - See more at: http://www.codemiles.com/javascript-examples/simple-javascript-calendar-t7767.html#sthash.8I62Q6UV.dpuf
