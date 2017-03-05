@@ -1,42 +1,41 @@
-<!doctype html>
-<html lang="en">
-  <head>
-    <meta charset="utf-8">
-    <title></title>
-    <meta name="description" content="">
-    <meta name="author" content="">
-  </head>
-  <body>
-    <ul id="events-upcoming">
-    </ul>
-    <ul id="events-past">
-    </ul>
-    <script src="https://code.jquery.com/jquery-1.11.3.min.js"></script>
-    <script src="format-google-calendar.js"></script>
-    <script>
-      formatGoogleCalendar.init({
-        calendarUrl: 'https://calendar.google.com/calendar/embed?src=s1iv870n2rgvfc3ich4g3bpevs%40group.calendar.google.com&ctz=America/Los_Angeles',
-        past: true,
-        upcoming: true,
-        sameDayTimes: true,
-        pastTopN: 20,
-        upcomingTopN: 3,
-        recurringEvents: true,
-        itemsTagName: 'li',
-        upcomingSelector: '#events-upcoming',
-        pastSelector: '#events-past',
-        upcomingHeading: '<h2>Upcoming events</h2>',
-        pastHeading: '<h2>Past events</h2>',
-        format: ['*date*', ': ', '*summary*', ' &mdash; ', '*description*', ' in ', '*location*']
-      });
-    </script>
-  </body>
-  <iframe
-  src="https://calendar.google.com/calendar/embed?height=600&amp;wkst=1&amp;bgcolor=%23FFFFFF&amp;src=s1iv870n2rgvfc3ich4g3bpevs%40group.calendar.google.com&amp;color=%23182C57&amp;ctz=America%2FLos_Angeles"
-  style="border-width:0"
-  width="800"
-  height="600"
-  frameborder="0"
-  scrolling="no">
-  </iframe>
-</html>
+function createEvent() {
+  var calendarId = 'primary';
+  var start = getRelativeDate(1, 12);
+  var end = getRelativeDate(1, 13);
+  var event = {
+    summary: 'Lunch Meeting',
+    location: 'The Deli',
+    description: 'To discuss our plans for the presentation next week.',
+    start: {
+      dateTime: start.toISOString()
+    },
+    end: {
+      dateTime: end.toISOString()
+    },
+    attendees: [
+      {email: 'alice@example.com'},
+      {email: 'bob@example.com'}
+    ],
+    // Red background. Use Calendar.Colors.get() for the full list.
+    colorId: 11
+  };
+  event = Calendar.Events.insert(event, calendarId);
+  Logger.log('Event ID: ' + event.getId());
+}
+
+/**
+ * Helper function to get a new Date object relative to the current date.
+ * @param {number} daysOffset The number of days in the future for the new date.
+ * @param {number} hour The hour of the day for the new date, in the time zone
+ *     of the script.
+ * @return {Date} The new date.
+ */
+function getRelativeDate(daysOffset, hour) {
+  var date = new Date();
+  date.setDate(date.getDate() + daysOffset);
+  date.setHours(hour);
+  date.setMinutes(0);
+  date.setSeconds(0);
+  date.setMilliseconds(0);
+  return date;
+}
